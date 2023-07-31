@@ -19,5 +19,5 @@ Estará allotjada en Vercel i la BBDD hi será a supabase codificada en prisma
     <li>[] Taula "taula" (array "persona")</li>
  <ol>
 
-<!-- Maybe -->
+## Maybe
 [] Dibuix (diagrama) de les taules y les persones. Es pot fer una taula tipus excel en el seu defecte per taula.
