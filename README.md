@@ -13,11 +13,14 @@ Estará allotjada en Vercel i la BBDD hi será a supabase codificada en prisma
             <li>[X] Si sel.lecciona una taula, desapareixen opcions</li>
             <li>[] Minim de persones/taula de 4</li>
             <li>[] Asignar els grups de menys de 4 a taules de menys de 10</li>
-        </ol>
+        </ul>
     <li>[] Codi i diagrama de la BBDD</li>
     <li>[] Taula "persona" (id, nom, telefon, pagat(boolean), taula)</li>
     <li>[] Taula "taula" (array "persona")</li>
- <ol>
+ </ul>
 
 ## Maybe
-[] Dibuix (diagrama) de les taules y les persones. Es pot fer una taula tipus excel en el seu defecte per taula.
+<ul>
+    <li>[] Dibuix (diagrama) de les taules y les persones. Es pot fer una taula tipus excel en el seu defecte per taula.
+    </li>
+</ul>
