@@ -12,9 +12,9 @@ datasource db {
 
 model Persona {
   id       Int     @id @default(autoincrement())
-  name     String
+  nom      String
   telefon  String
-  adults     Int     @default(1)
+  adults   Int     @default(1)
   nens     Int     @default(0)
   veggi    Boolean @default(false)
   veggiNum Int     @default(0)

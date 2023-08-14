@@ -1,17 +1,17 @@
 <script lang="ts">
+	import type { Taula } from "$lib/interfaces";
+
 	let isOpen = false;
-    let optionSelected: string;
-    $: console.log(optionSelected)
+	export let optionSelected: Taula;
 	export let options: any[];
-	export let handleOnSubmit: (a: number) => void;
+	export let handleSelectedOptions: (a:any) => void;
 
 	function handlerOpenMenu() {
 		isOpen = !isOpen;
 	}
 
-	function handleSelectOption(id: number, name: string) {
-		handleOnSubmit(id);
-        optionSelected = name
+	function handleSelectOption(option) {
+		handleSelectedOptions(option);
 		handlerOpenMenu();
 	}
 </script>
@@ -26,7 +26,7 @@
 			aria-expanded={isOpen}
 			aria-haspopup="true"
 		>
-			{optionSelected || "Options"}
+			{optionSelected.nom}
 			<svg
 				class="-mr-1 h-5 w-5 text-gray-400"
 				viewBox="0 0 20 20"
@@ -51,15 +51,15 @@
 		tabindex="-1"
 	>
 		<div class="py-1" role="none">
-			{#each options as { id, name }}
+			{#each options as option}
 				<span
 					class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900 border-t-2"
 					role="menuitem"
 					tabindex="-1"
-					id="menu-item-0"
-					on:click={handleSelectOption(id, name)}
-					on:keydown={handleSelectOption(id, name)}
-					>{name}
+					id="menu-item"
+					on:click={() => handleSelectOption(option)}
+					on:keydown={() => handleSelectOption(option)}
+					>{option.nom}
 				</span>
 			{/each}
 		</div>

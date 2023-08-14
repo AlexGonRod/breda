@@ -14,9 +14,9 @@ Estará allotjada en Vercel i la BBDD hi será a supabase codificada en prisma
             <li>[] Minim de persones/taula de 4</li>
             <li>[] Asignar els grups de menys de 4 a taules de menys de 10</li>
         </ul>
-    <li>[] Codi i diagrama de la BBDD</li>
-    <li>[] Taula "persona" (id, nom, telefon, pagat(boolean), taula)</li>
-    <li>[] Taula "taula" (array "persona")</li>
+    <li>[X] Codi i diagrama de la BBDD</li>
+    <li>[X] Taula "persona" (id, nom, telefon, pagat(boolean), taula)</li>
+    <li>[X] Taula "taula" (array "persona")</li>
  </ul>
 
 ## Maybe
