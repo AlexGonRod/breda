@@ -2,7 +2,6 @@
 	import Form from '../components/form/Form.svelte';
 	import type { ActionData } from './$types.js';
 
-
 	export let data;
   export let form: ActionData
 

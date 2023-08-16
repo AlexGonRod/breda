@@ -1,4 +1,4 @@
-import {fail, redirect, type Actions} from '@sveltejs/kit'
+import {fail, type Actions} from '@sveltejs/kit'
 import { getTaules } from '$lib/server/api';
 import {prisma } from '$lib/prisma'
 
@@ -17,21 +17,37 @@ export const actions: Actions = {
         const veggi = Boolean(form.get('veggi'));
         const veggiNum = Number(form.get("veggiNum"));
 
-        if(!nom) return fail(400, {nom, missing: true})
-        if(!telefon) return fail(400, {telefon, missing: true})
+        const error: Record<string,unknown> = {};
 
-        await prisma.persona.create({
-            data: {
-                nom,
-                telefon,
-                adults,
-                nens,
-                veggi,
-                veggiNum,
+        // if(!nom) return fail(400, {nom, missing: true})
+        // if(!telefon) return fail(400, {telefon, missing: true})
+        if(!nom) error.nom = 'requerit'
+        if (!telefon || telefon?.length !== 9) error.telefon = 'incorrecte'
+        try {
+            if (Object.keys(error).length > 0) {
+                const errors = {
+                    error
+                }
+                return fail(404, errors)
+
             }
-        })
-        throw redirect(303, '/')
-        return { success: true}
+            await prisma.persona.create({
+                data: {
+                    nom,
+                    telefon,
+                    adults,
+                    nens,
+                    veggi,
+                    veggiNum,
+                }
+            })
+            return { success: true }
+        } catch (err) {
+            error.db = 'error al guardar'
+            return fail(500, error)
+        }
+
+
     },
     update: async ({request, url}) => {
         const form = await request.formData();
@@ -41,24 +57,38 @@ export const actions: Actions = {
         const veggi = Boolean(form.get("veggi"));
         const veggiNum = Number(form.get("veggiNum"));
 
-        if (!id) return fail(400, { id, missing: true })
-        if (!adults) return fail(400, { adults, missing: true })
-        if (!nens) return fail(400, { nens, missing: true })
+        const error: Record<string,unknown> = {};
+        try {
+            if (!id) return fail(404, { id, error: true });
+            if (!adults) error.adults = 'requerit';
+            if (!nens) error.nens = 'requerit';
 
-        await prisma.persona.update({
-            where: {
-                id: Number(id)
-            },
-            data: {
-                adults,
-                nens,
-                veggi,
-                veggiNum,
+
+            if (Object.keys(error).length > 0) {
+                const errors = {
+                    error
+                }
+                return fail(404, errors)
+
+            } else {
+                await prisma.persona.update({
+                    where: {
+                        id: Number(id)
+                    },
+                    data: {
+                        adults,
+                        nens,
+                        veggi,
+                        veggiNum,
+                    }
+                })
+                return {
+                    success: true
+                }
             }
-        })
-        throw redirect(303, '/')
-        return {
-            success: true
+        } catch (err) {
+            error.db = 'error al guardar'
+            return fail(500, error)
         }
     },
     test: async ({request}) => {

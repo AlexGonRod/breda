@@ -1,20 +1,32 @@
 <script lang="ts">
 	import type { Taula, Taules } from '$lib/interfaces';
-	import { enhance } from '$app/forms';
+	import { enhance, applyAction } from '$app/forms';
 	import Dropdown from '../Dropdown.svelte';
 	import type { SubmitFunction } from '@sveltejs/kit';
+	import Toast from '../Toast.svelte';
+	import { invalidateAll } from '$app/navigation';
 
 	export let options: Taules;
-	export let form;
+	export let form: Record<string | number, unknown>;
+	export let loading: Boolean = false;
+	export let type: string;
 
-	let loading = false;
+	async function sleep() {
+		type = ''
+	}
+
+	$: isSuccess = type === 'success' ? 'Correcte' : 'Error al guardar';
+	$: isDefault = optionSelected.nom === 'Taula';
 
 	const saveToDDB: SubmitFunction = () => {
-		loading = true;
-
-		return async ({ update }) => {
-			loading = false;
-			await update();
+		return async ({ result, update }) => {
+			if (result.type === 'success') {
+				type = result.type;
+				await invalidateAll();
+			}
+			if (result.type === 'success' && isDefault) update({ reset: true });
+			await applyAction(result);
+			setTimeout(sleep, 2000);;
 		};
 	};
 
@@ -28,7 +40,6 @@
 		veggiNum: 0,
 	};
 	let optionSelected: Taula | Taules = { id: 0, nom: 'Taula' };
-	$: isDefault = optionSelected.nom === 'Taula';
 
 	function handleSelectedOptions(value: Taules) {
 		optionSelected = { ...value };
@@ -41,9 +52,10 @@
 <div class="mb-4 max-w-md mx-auto">
 	<Dropdown options={totalData} {optionSelected} {handleSelectedOptions} />
 
-	{#if form?.missing}
+	{#if form?.error}
 		<p class="text-red-600">
-			{Object.keys(form)[0].toUpperCase()} es obligatori
+			{Object.keys(form.error)[0].toUpperCase()}
+			{Object.values(form.error)[0]}
 		</p>
 	{/if}
 	{#if !isDefault}
@@ -51,7 +63,7 @@
 			method="POST"
 			action="?/update&id={optionSelected.id}"
 			class="max-w-md mx-auto"
-			use:enhance
+			use:enhance={saveToDDB}
 		>
 			<div class="mb-4">
 				<label for="adults" class="block text-gray-700">Adults</label>
@@ -61,6 +73,7 @@
 					class="form-input mt-1 block w-full"
 					placeholder={optionSelected?.adults}
 					value={optionSelected?.adults}
+					required
 				/>
 
 				<label for="nens" class="block text-gray-700">Nens</label>
@@ -108,7 +121,12 @@
 			</button>
 		</form>
 	{:else}
-		<form method="POST" action="?/add" use:enhance={saveToDDB} class="max-w-md mx-auto">
+		<form
+			method="POST"
+			action="?/add"
+			use:enhance={saveToDDB}
+			class="max-w-md mx-auto"
+		>
 			<div class="mb-4">
 				<label for="nom" class="block text-gray-700">Nom</label>
 				<input
@@ -181,6 +199,7 @@
 			</button>
 		</form>
 	{/if}
+	<Toast {type} message={isSuccess} />
 </div>
 
 <style lang="postcss">
@@ -192,6 +211,3 @@
 		@apply rounded text-blue-500 focus:ring-blue-500;
 	}
 </style>
-
-
-
