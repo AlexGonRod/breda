@@ -9,6 +9,7 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test": "vitest",
+		"coverge": "vitest run --coverage",
 		"lint": "eslint .",
 		"prepare": "svelte-kit sync",
 		"postinstall": "prisma generate"
@@ -16,11 +17,15 @@
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.20.4",
+		"@testing-library/jest-dom": "^6.1.2",
+		"@testing-library/svelte": "^4.0.3",
+		"@types/jest": "^29.5.4",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
 		"autoprefixer": "^10.4.14",
 		"eslint": "^8.28.0",
 		"eslint-plugin-svelte": "^2.30.0",
+		"jsdom": "^22.1.0",
 		"postcss": "^8.4.27",
 		"prisma": "^5.0.0",
 		"svelte": "^4.0.5",
@@ -29,7 +34,7 @@
 		"tslib": "^2.4.1",
 		"typescript": "^5.0.0",
 		"vite": "^4.4.2",
-		"vitest": "^0.32.2"
+		"vitest": "^0.34.3"
 	},
 	"type": "module",
 	"dependencies": {
