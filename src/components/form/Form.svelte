@@ -8,11 +8,12 @@
 
 	export let options: Taules;
 	export let form: Record<string | number, unknown>;
-	export let loading: Boolean = false;
+
 	export let type: string;
+	$: loading = false;
 
 	async function sleep() {
-		type = ''
+		type = '';
 	}
 
 	$: isSuccess = type === 'success' ? 'Correcte' : 'Error al guardar';
@@ -20,13 +21,24 @@
 
 	const saveToDDB: SubmitFunction = () => {
 		return async ({ result, update }) => {
+			if (result.type === 'failure') {
+				await applyAction(result);
+			}
 			if (result.type === 'success') {
 				type = result.type;
+				loading = true;
 				await invalidateAll();
 			}
-			if (result.type === 'success' && isDefault) update({ reset: true });
+			if (result.type === 'success' && isDefault) {
+				loading = true;
+				update({ reset: true })
+			};
+
+
 			await applyAction(result);
-			setTimeout(sleep, 2000);;
+
+			setTimeout(sleep, 2000);
+			loading = false
 		};
 	};
 
@@ -46,7 +58,7 @@
 	}
 
 	const defaultValue = [optionSelected];
-	const totalData = [...defaultValue, ...options];
+	$: totalData = [...defaultValue, ...options];
 </script>
 
 <div class="mb-4 max-w-md mx-auto">
@@ -117,7 +129,7 @@
 				type="submit"
 				class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 			>
-				Enviar
+				{!loading ? 'Enviar' : 'Loading...'}
 			</button>
 		</form>
 	{:else}
@@ -191,12 +203,14 @@
 				</div>
 			{/if}
 
-			<button
-				type="submit"
-				class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-			>
-				Enviar
-			</button>
+			<a href="/" data-sveltekit-reload>
+				<button
+					type="submit"
+					class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+				>
+					{!loading ? 'Enviar' : 'Loading...'}
+				</button>
+			</a>
 		</form>
 	{/if}
 	<Toast {type} message={isSuccess} />

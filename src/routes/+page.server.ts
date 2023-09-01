@@ -1,4 +1,4 @@
-import {fail, type Actions} from '@sveltejs/kit'
+import {fail, type Actions, redirect} from '@sveltejs/kit'
 import { getTaules } from '$lib/server/api';
 import {prisma } from '$lib/prisma'
 
@@ -19,8 +19,6 @@ export const actions: Actions = {
 
         const error: Record<string,unknown> = {};
 
-        // if(!nom) return fail(400, {nom, missing: true})
-        // if(!telefon) return fail(400, {telefon, missing: true})
         if(!nom) error.nom = 'requerit'
         if (!telefon || telefon?.length !== 9) error.telefon = 'incorrecte'
         try {
@@ -41,7 +39,9 @@ export const actions: Actions = {
                     veggiNum,
                 }
             })
-            return { success: true }
+
+            return {success: true}
+
         } catch (err) {
             error.db = 'error al guardar'
             return fail(500, error)
@@ -82,9 +82,7 @@ export const actions: Actions = {
                         veggiNum,
                     }
                 })
-                return {
-                    success: true
-                }
+                return {success: true}
             }
         } catch (err) {
             error.db = 'error al guardar'

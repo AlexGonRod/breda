@@ -3,7 +3,7 @@
 	import type { ActionData } from './$types.js';
 
 	export let data;
-  export let form: ActionData
+  	export let form: ActionData
 
 </script>
 
