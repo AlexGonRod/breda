@@ -1,4 +1,4 @@
-import {fail, type Actions, redirect} from '@sveltejs/kit'
+import {fail, type Actions } from '@sveltejs/kit'
 import { getTaules } from '$lib/server/api';
 import {prisma } from '$lib/prisma'
 

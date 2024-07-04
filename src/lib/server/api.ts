@@ -1,8 +1,7 @@
 import type { Taules } from "$lib/interfaces";
 import { prisma } from "../prisma";
-import { json } from '@sveltejs/kit'
 
-export async function getTaules() {
+export async function getTaules(): Promise<Taules> {
     const taules = await prisma.persona.findMany({
         select: {
             id: true,
